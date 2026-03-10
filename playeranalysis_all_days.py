@@ -194,8 +194,8 @@ def plot_heatmaps(human_df, kill_df, botkill_df, death_df, botdeath_df, selected
         ax1.scatter(
             human_df["map_x"],
             human_df["map_y"],
-            s=8,
-            c="black",
+            s=10,
+            c="yellow",
             alpha=0.3,
             label="Players"
         )
@@ -215,7 +215,7 @@ def plot_heatmaps(human_df, kill_df, botkill_df, death_df, botdeath_df, selected
         ax2.scatter(
             kill_data["map_x"],
             kill_data["map_y"],
-            s=8,
+            s=10,
             c="red",
             alpha=0.6,
             label="Kills"
@@ -225,7 +225,7 @@ def plot_heatmaps(human_df, kill_df, botkill_df, death_df, botdeath_df, selected
         ax2.scatter(
             death_data["map_x"],
             death_data["map_y"],
-            s=8,
+            s=10,
             c="blue",
             alpha=0.6,
             label="Deaths"
