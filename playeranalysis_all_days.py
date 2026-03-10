@@ -174,44 +174,66 @@ def plot_heatmaps(human_df, kill_df, botkill_df, death_df, botdeath_df, selected
     import matplotlib.pyplot as plt
     import pandas as pd
 
-    map_sizes = {
-        "AmbroseValley": 4320,
-        "GrandRift": 2160,
-        "Lockdown": 9000,
-    }
+    map_img = get_map_image(selected_map)
 
-    map_size = map_sizes.get(selected_map, 1000)
+    if map_img is None:
+        return None, None, None
 
-    # Player activity heatmap
-    fig1, ax1 = plt.subplots()
-    ax1.hexbin(human_df["map_x"], human_df["map_y"], gridsize=40)
+    map_size = map_img.shape[1]
+
+    # ---------------- Player Activity ----------------
+    fig1, ax1 = plt.subplots(figsize=(6,6))
+    ax1.imshow(map_img)
+
+    ax1.hexbin(
+        human_df["map_x"],
+        human_df["map_y"],
+        gridsize=40,
+        cmap="hot",
+        alpha=0.6
+    )
+
     ax1.set_title("Player Activity")
     ax1.set_xlim(0, map_size)
-    ax1.set_ylim(0, map_size)
+    ax1.set_ylim(map_size, 0)   # important (same as journey)
 
-    # Kill heatmap
-    fig2, ax2 = plt.subplots()
+    # ---------------- Kill Heatmap ----------------
+    fig2, ax2 = plt.subplots(figsize=(6,6))
+    ax2.imshow(map_img)
 
     kill_data = pd.concat([kill_df, botkill_df])
 
     if not kill_data.empty:
-        ax2.hexbin(kill_data["map_x"], kill_data["map_y"], gridsize=40)
+        ax2.hexbin(
+            kill_data["map_x"],
+            kill_data["map_y"],
+            gridsize=40,
+            cmap="Reds",
+            alpha=0.6
+        )
 
     ax2.set_title("Kill Locations")
     ax2.set_xlim(0, map_size)
-    ax2.set_ylim(0, map_size)
+    ax2.set_ylim(map_size, 0)
 
-    # Death heatmap
-    fig3, ax3 = plt.subplots()
+    # ---------------- Death Heatmap ----------------
+    fig3, ax3 = plt.subplots(figsize=(6,6))
+    ax3.imshow(map_img)
 
     death_data = pd.concat([death_df, botdeath_df])
 
     if not death_data.empty:
-        ax3.hexbin(death_data["map_x"], death_data["map_y"], gridsize=40)
+        ax3.hexbin(
+            death_data["map_x"],
+            death_data["map_y"],
+            gridsize=40,
+            cmap="Blues",
+            alpha=0.6
+        )
 
     ax3.set_title("Death Locations")
     ax3.set_xlim(0, map_size)
-    ax3.set_ylim(0, map_size)
+    ax3.set_ylim(map_size, 0)
 
     return fig1, fig2, fig3
 
