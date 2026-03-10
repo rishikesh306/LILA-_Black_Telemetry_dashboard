@@ -18,8 +18,7 @@ st.title("🎮 LILA BLACK - Player Telemetry Dashboard")
 @st.cache_data(max_entries=1, ttl=3600)  # ← cache limit add pannurom
 def get_data():
     return load_all_data()
-def get_data():
-    return load_all_data()
+
 
 df = get_data()
 
