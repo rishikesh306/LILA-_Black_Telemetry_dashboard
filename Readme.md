@@ -13,6 +13,81 @@ Built for Level Designers to explore how players move, fight, and die across 3 m
 🔗 [View Dashboard](https://lila-blacktelemetrydashboard-miqwtowrayof47w7wdrqou.streamlit.app/)
 
 ---
+## Deployment Notes (Important)
+
+The full dashboard is deployed using the free version of Streamlit Cloud.
+
+Since the dataset is relatively large (~89,000 rows across 1,243 files), some infrastructure-related limitations may occur.
+
+---
+
+## 1. App Sleep / Initial Loading Delay
+
+If the dashboard is opened after some inactivity:
+
+- It may take time to load  
+- It may appear temporarily unresponsive  
+
+This happens because the free cloud environment automatically goes to sleep when not in use.
+
+Additionally, loading large telemetry datasets requires significant RAM usage.
+
+If the app does not respond:
+
+    Wait for the initial load
+    OR  
+    Refresh the page
+
+If the issue persists:
+
+- Clone/download the repository
+
+- Run locally using:
+    - streamlit run app_all_days.py
+
+Running locally does not produce these issues, as local system RAM resources are available.
+
+---
+## 2. Timeline Filter Usage Recommendation
+
+While using the timeline slider:
+
+- Adjust time in small increments (5–10 seconds)
+
+- Avoid jumping across large time ranges at once
+
+- Large jumps increase memory usage in the free cloud environment and may cause a temporary crash.
+
+This issue does not occur when running locally.
+
+---
+## 3. Occasional Match Loading Issue
+
+- Due to the large number of files and event rows:
+
+- A selected match may occasionally fail to load
+
+- The visualization may not render properly
+
+- If This Happens
+
+      Refresh the page 
+      OR
+      Select another match
+      OR
+      Switch to a different day
+
+This is related to cloud resource limitations, not the processing logic.
+
+---
+## Why These Notes Are Mentioned
+
+As a student developer, I believe it is important to clearly communicate deployment constraints along with technical implementation.
+
+The analytical pipeline works as expected.
+The mentioned limitations are related to free-tier cloud infrastructure.
+
+---
 
 ## Dataset Overview
 
