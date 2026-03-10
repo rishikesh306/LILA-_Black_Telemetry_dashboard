@@ -181,60 +181,39 @@ def plot_heatmaps(human_df, kill_df, botkill_df, death_df, botdeath_df, selected
 
     map_size = map_img.shape[1]
 
-    # ---------------- Player Activity ----------------
-    fig1, ax1 = plt.subplots(figsize=(6,6))
-    ax1.imshow(map_img)
-
-    ax1.hexbin(
-        human_df["map_x"],
-        human_df["map_y"],
-        gridsize=40,
-        cmap="hot",
-        alpha=0.6
-    )
-
-    ax1.set_title("Player Activity")
-    ax1.set_xlim(0, map_size)
-    ax1.set_ylim(map_size, 0)   # important (same as journey)
-
-    # ---------------- Kill Heatmap ----------------
-    fig2, ax2 = plt.subplots(figsize=(6,6))
-    ax2.imshow(map_img)
-
+    # combine datasets
     kill_data = pd.concat([kill_df, botkill_df])
-
-    if not kill_data.empty:
-        ax2.hexbin(
-            kill_data["map_x"],
-            kill_data["map_y"],
-            gridsize=40,
-            cmap="Reds",
-            alpha=0.6
-        )
-
-    ax2.set_title("Kill Locations")
-    ax2.set_xlim(0, map_size)
-    ax2.set_ylim(map_size, 0)
-
-    # ---------------- Death Heatmap ----------------
-    fig3, ax3 = plt.subplots(figsize=(6,6))
-    ax3.imshow(map_img)
-
     death_data = pd.concat([death_df, botdeath_df])
 
-    if not death_data.empty:
-        ax3.hexbin(
-            death_data["map_x"],
-            death_data["map_y"],
-            gridsize=40,
-            cmap="Blues",
-            alpha=0.6
-        )
+    # -------- Player Activity --------
+    fig1, ax1 = plt.subplots(figsize=(6,6))
+    ax1.imshow(map_img)
+    if not human_df.empty:
+        ax1.hexbin(human_df["map_x"], human_df["map_y"], gridsize=25, cmap="hot")
+    ax1.set_xlim(0, map_size)
+    ax1.set_ylim(map_size, 0)
+    ax1.set_title("Player Activity")
+    ax1.axis("off")
 
-    ax3.set_title("Death Locations")
+    # -------- Kill Heatmap --------
+    fig2, ax2 = plt.subplots(figsize=(6,6))
+    ax2.imshow(map_img)
+    if not kill_data.empty:
+        ax2.hexbin(kill_data["map_x"], kill_data["map_y"], gridsize=25, cmap="Reds")
+    ax2.set_xlim(0, map_size)
+    ax2.set_ylim(map_size, 0)
+    ax2.set_title("Kill Locations")
+    ax2.axis("off")
+
+    # -------- Death Heatmap --------
+    fig3, ax3 = plt.subplots(figsize=(6,6))
+    ax3.imshow(map_img)
+    if not death_data.empty:
+        ax3.hexbin(death_data["map_x"], death_data["map_y"], gridsize=25, cmap="Blues")
     ax3.set_xlim(0, map_size)
     ax3.set_ylim(map_size, 0)
-
+    ax3.set_title("Death Locations")
+    ax3.axis("off")
     plt.close("all")
     return fig1, fig2, fig3
 
