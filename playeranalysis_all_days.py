@@ -136,7 +136,7 @@ def plot_journey(human_df, bot_df, kill_df, death_df, botkill_df, botdeath_df, l
     ax.imshow(map_img)
     map_size = map_img.shape[1]
     ax.set_xlim(0, map_size)
-    ax.set_ylim(map_size, 0)
+    ax.set_ylim(map_size, 0)    
 
     if len(human_df) > 0:
         ax.scatter(human_df["map_x"].iloc[0], human_df["map_y"].iloc[0], color="green", s=100, label="Start")

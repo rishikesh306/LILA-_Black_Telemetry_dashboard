@@ -10,7 +10,7 @@ Built for Level Designers to explore how players move, fight, and die across 3 m
 
 ## Live Demo
 
-🔗 [View Dashboard](https://your-streamlit-url.streamlit.app)
+🔗 [View Dashboard](https://lila-blacktelemetrydashboard-miqwtowrayof47w7wdrqou.streamlit.app/)
 
 ---
 
