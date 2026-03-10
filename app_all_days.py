@@ -64,7 +64,7 @@ timeline_seconds = st.sidebar.slider(
 
 # ---------------- PIPELINE ----------------
 
-filtered_df = match_df
+filtered_df = match_df.copy()
 
 filtered_df = apply_timeline(filtered_df, seconds=timeline_seconds)
 filtered_df = convert_coordinates(filtered_df, selected_map)
