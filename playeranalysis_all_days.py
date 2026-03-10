@@ -235,6 +235,7 @@ def plot_heatmaps(human_df, kill_df, botkill_df, death_df, botdeath_df, selected
     ax3.set_xlim(0, map_size)
     ax3.set_ylim(map_size, 0)
 
+    plt.close("all")
     return fig1, fig2, fig3
 
 
