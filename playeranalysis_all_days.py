@@ -194,7 +194,7 @@ def plot_heatmaps(human_df, kill_df, botkill_df, death_df, botdeath_df, selected
         ax1.scatter(
             human_df["map_x"],
             human_df["map_y"],
-            s=10,
+            s=15,
             c="yellow",
             alpha=0.3,
             label="Players"
@@ -203,6 +203,7 @@ def plot_heatmaps(human_df, kill_df, botkill_df, death_df, botdeath_df, selected
     
     ax1.set_xlim(0, map_size)
     ax1.set_ylim(map_size, 0)
+    ax1.legend()
     ax1.set_title("Player Activity Heatmap")
     ax1.axis("off")
 
@@ -215,7 +216,7 @@ def plot_heatmaps(human_df, kill_df, botkill_df, death_df, botdeath_df, selected
         ax2.scatter(
             kill_data["map_x"],
             kill_data["map_y"],
-            s=10,
+            s=15,
             c="red",
             alpha=0.6,
             label="Kills"
@@ -225,7 +226,7 @@ def plot_heatmaps(human_df, kill_df, botkill_df, death_df, botdeath_df, selected
         ax2.scatter(
             death_data["map_x"],
             death_data["map_y"],
-            s=10,
+            s=15,
             c="blue",
             alpha=0.6,
             label="Deaths"
