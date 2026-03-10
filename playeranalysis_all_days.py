@@ -171,8 +171,7 @@ def plot_journey(human_df, bot_df, kill_df, death_df, botkill_df, botdeath_df, l
 
 def plot_heatmaps(human_df, kill_df, botkill_df, death_df, botdeath_df, selected_map):
     plt.close("all")
-    import matplotlib.pyplot as plt
-    import pandas as pd
+   
     
     map_settings = {
     "AmbroseValley": 4320,
