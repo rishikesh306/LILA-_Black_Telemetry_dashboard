@@ -126,7 +126,7 @@ def get_map_image(map_id):
 
 import matplotlib.pyplot as plt
 def plot_journey(human_df, bot_df, kill_df, death_df, botkill_df, botdeath_df, loot_df, storm_df, map_id):
-
+    plt.close("all")
     map_img = get_map_image(map_id)
     
     if map_img is None:
@@ -168,55 +168,50 @@ def plot_journey(human_df, bot_df, kill_df, death_df, botkill_df, botdeath_df, l
     ax.legend()
     return fig
 
-import seaborn as sns  # heatmap pannurom
 
-def plot_heatmaps(human_df, kill_df, botkill_df, death_df, botdeath_df, map_id):
+def plot_heatmaps(human_df, kill_df, botkill_df, death_df, botdeath_df, selected_map):
 
-    map_img = get_map_image(map_id)  # correct map image load pannurom
+    import matplotlib.pyplot as plt
+    import pandas as pd
 
-    # PLAYER TRAFFIC
-    fig1, ax1 = plt.subplots(figsize=(6, 5))
-    ax1.imshow(map_img)
-    map_size = map_img.shape[1]
+    map_sizes = {
+        "AmbroseValley": 4320,
+        "GrandRift": 2160,
+        "Lockdown": 9000,
+    }
+
+    map_size = map_sizes.get(selected_map, 1000)
+
+    # Player activity heatmap
+    fig1, ax1 = plt.subplots()
+    ax1.hexbin(human_df["map_x"], human_df["map_y"], gridsize=40)
+    ax1.set_title("Player Activity")
     ax1.set_xlim(0, map_size)
-    ax1.set_ylim(map_size, 0)
-    if len(human_df) > 1:
-        sns.kdeplot(x=human_df["map_x"], y=human_df["map_y"],
-                    cmap="Reds", fill=True, thresh=0.05,
-                    warn_singular=False, ax=ax1)
-    ax1.set_title("Player Traffic")
+    ax1.set_ylim(0, map_size)
 
-   
-    # KILL ZONES
-    all_kills = pd.concat([kill_df, botkill_df])
-    fig2, ax2 = plt.subplots(figsize=(6, 5))
-    ax2.imshow(map_img)  # ← map always show pannurom
-    map_size = map_img.shape[1]
+    # Kill heatmap
+    fig2, ax2 = plt.subplots()
+
+    kill_data = pd.concat([kill_df, botkill_df])
+
+    if not kill_data.empty:
+        ax2.hexbin(kill_data["map_x"], kill_data["map_y"], gridsize=40)
+
+    ax2.set_title("Kill Locations")
     ax2.set_xlim(0, map_size)
-    ax2.set_ylim(map_size, 0)
-    if len(all_kills) > 1:
-        sns.kdeplot(x=all_kills["map_x"], y=all_kills["map_y"],
-                cmap="Greens", fill=True, thresh=0.05,
-                warn_singular=False, ax=ax2)
-    else:
-    # kills kam-a irundha scatter show pannurom
-        if len(all_kills) > 0:
-            ax2.scatter(all_kills["map_x"], all_kills["map_y"], 
-                   color="lime", s=100, label="Kill")
-    ax2.set_title("Kill Zones")
-    
-    # DEATH ZONES
-    all_deaths = pd.concat([death_df, botdeath_df])
-    fig3, ax3 = plt.subplots(figsize=(6, 5))
-    ax3.imshow(map_img)
-    map_size = map_img.shape[1]
+    ax2.set_ylim(0, map_size)
+
+    # Death heatmap
+    fig3, ax3 = plt.subplots()
+
+    death_data = pd.concat([death_df, botdeath_df])
+
+    if not death_data.empty:
+        ax3.hexbin(death_data["map_x"], death_data["map_y"], gridsize=40)
+
+    ax3.set_title("Death Locations")
     ax3.set_xlim(0, map_size)
-    ax3.set_ylim(map_size, 0)
-    if len(all_deaths) > 1:
-        sns.kdeplot(x=all_deaths["map_x"], y=all_deaths["map_y"],
-                    cmap="Blues", fill=True, thresh=0.05,
-                    warn_singular=False, ax=ax3)
-    ax3.set_title("Death Zones")
+    ax3.set_ylim(0, map_size)
 
     return fig1, fig2, fig3
 
