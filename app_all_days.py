@@ -28,6 +28,7 @@ selected_date = st.sidebar.selectbox(
 
 # Load Data
 df = get_data(selected_date)
+st.write("Rows:", len(df))
 
 # Safety check
 if df is None or df.empty:
