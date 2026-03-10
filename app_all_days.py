@@ -1,8 +1,7 @@
 import streamlit as st
 import matplotlib.pyplot as plt
 from playeranalysis_all_days import (
-    load_all_data,
-    apply_filters,
+    load_day_data,
     apply_timeline,
     convert_coordinates,
     separate_events,
@@ -10,78 +9,124 @@ from playeranalysis_all_days import (
     plot_heatmaps
 )
 
-# st.set_page_config(layout="wide")
+# Page Title
 st.title("🎮 LILA BLACK - Player Telemetry Dashboard")
 
-# load all data
-# @st.cache_data  # ← data once load pannurom, again reload pannatu
-@st.cache_data(max_entries=1, ttl=3600)  # ← cache limit add pannurom
-def get_data():
-    return load_all_data()
+# Cache Data Loader
+@st.cache_data
+def get_data(selected_date):
+    return load_day_data(selected_date)
 
-
-df = get_data()
-
-# SIDEBAR FILTERS
+# ---------------- SIDEBAR ----------------
 st.sidebar.header("Filters")
 
-# date filter
+# Date Selection
 selected_date = st.sidebar.selectbox(
     "Select Date",
     ["February_10", "February_11", "February_12", "February_13", "February_14"]
 )
 
-# SIDEBAR FILTERS
-st.sidebar.header("Filters")
+# Load Data
+df = get_data(selected_date)
 
-# match filter - selected date la irukka matches மட்டும் show aagum
-date_df = df[df["date"] == selected_date]
-matches = date_df["match_id"].unique()
+# Safety check
+if df is None or df.empty:
+    st.warning("⚠️ No data found for this date")
+    st.stop()
+
+# Match Selection
+matches = sorted(df["match_id"].unique())
+
+if len(matches) == 0:
+    st.warning("⚠️ No matches available")
+    st.stop()
 
 selected_match = st.sidebar.selectbox("Select Match", matches)
 
-# map - auto detect pannurom
-selected_map = df[df["match_id"] == selected_match]["map_id"].iloc[0]
-st.sidebar.write("🗺️ Map:", selected_map)  # map name show pannurom
+# Match Data
+match_df = df[df["match_id"] == selected_match]
 
-# timeline slider
-timeline_seconds = st.sidebar.slider("Timeline (seconds)", 5, 300, 150)
+if match_df.empty:
+    st.warning("⚠️ Match data not found")
+    st.stop()
 
-# APPLY PIPELINE
-filtered_df = apply_filters(df, selected_date, selected_match)
+# Map Detection
+selected_map = match_df["map_id"].iloc[0]
+st.sidebar.write("🗺️ Map:", selected_map)
+
+# Timeline Slider
+timeline_seconds = st.sidebar.slider(
+    "Timeline (seconds)",
+    min_value=5,
+    max_value=300,
+    value=150
+)
+
+# ---------------- PIPELINE ----------------
+
+filtered_df = match_df
+
 filtered_df = apply_timeline(filtered_df, seconds=timeline_seconds)
 filtered_df = convert_coordinates(filtered_df, selected_map)
 
-human_df, bot_df, kill_df, death_df, botkill_df, botdeath_df, loot_df, storm_df = separate_events(filtered_df)
+(
+    human_df,
+    bot_df,
+    kill_df,
+    death_df,
+    botkill_df,
+    botdeath_df,
+    loot_df,
+    storm_df
+) = separate_events(filtered_df)
 
-# no data check
-if len(human_df) == 0:
+# Player Data Check
+if human_df.empty:
     st.warning("⚠️ No player data. Try increasing timeline!")
     st.stop()
 
-# PLAYER JOURNEY
+# ---------------- PLAYER JOURNEY ----------------
+
 st.subheader("🗺️ Player Journey")
 
-fig = plot_journey(human_df, bot_df, kill_df, death_df, botkill_df, botdeath_df, loot_df, storm_df, selected_map)
-st.pyplot(fig)
-plt.close()
+fig = plot_journey(
+    human_df,
+    bot_df,
+    kill_df,
+    death_df,
+    botkill_df,
+    botdeath_df,
+    loot_df,
+    storm_df,
+    selected_map
+)
 
-# HEATMAPS
+st.pyplot(fig)
+plt.close(fig)
+
+# ---------------- HEATMAPS ----------------
+
 st.subheader("🔥 Heatmaps")
 
-fig1, fig2, fig3 = plot_heatmaps(human_df, kill_df, botkill_df, death_df, botdeath_df, selected_map)
+fig1, fig2, fig3 = plot_heatmaps(
+    human_df,
+    kill_df,
+    botkill_df,
+    death_df,
+    botdeath_df,
+    selected_map
+)
 
 col1, col2, col3 = st.columns(3)
 
 with col1:
     st.pyplot(fig1)
-    plt.close()
+    plt.close(fig1)
 
 with col2:
     st.pyplot(fig2)
-    plt.close()
+    plt.close(fig2)
 
 with col3:
     st.pyplot(fig3)
-    plt.close()
-
+    plt.close(fig3)

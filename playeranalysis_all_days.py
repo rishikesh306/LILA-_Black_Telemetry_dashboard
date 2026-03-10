@@ -64,9 +64,9 @@ def apply_timeline(df, seconds=10):
 def convert_coordinates(df, map_id):
 
     map_settings = {
-    "AmbroseValley": {"origin_x": -370, "origin_z": -473, "scale": 900,  "map_size": 1024},
-    "GrandRift":     {"origin_x": -290, "origin_z": -290, "scale": 581,  "map_size": 1024},
-    "Lockdown":      {"origin_x": -500, "origin_z": -500, "scale": 1000, "map_size": 1024},
+    "AmbroseValley": {"origin_x": -370, "origin_z": -473, "scale": 900,  "map_size": 4320},
+    "GrandRift":     {"origin_x": -290, "origin_z": -290, "scale": 581,  "map_size": 2160},
+    "Lockdown":      {"origin_x": -500, "origin_z": -500, "scale": 1000, "map_size": 9000},
 }
     settings = map_settings[map_id]
     origin_x = settings["origin_x"]
@@ -100,6 +100,7 @@ BASE_DIR = os.path.dirname(__file__)  # current file location
 from functools import lru_cache
 
 @lru_cache(maxsize=3)
+
 def get_map_image(map_id):
 
     map_images = {
@@ -110,8 +111,6 @@ def get_map_image(map_id):
 
     image_file = map_images[map_id]  # correct map image select pannurom
     return mpimg.imread(os.path.join(BASE_DIR, "minimaps", image_file))  # image load pannurom
-    # img = img.resize((1024, 1024))  # ← resize pannurom — memory save!
-    # return np.array(img)
 
 import matplotlib.pyplot as plt
 def plot_journey(human_df, bot_df, kill_df, death_df, botkill_df, botdeath_df, loot_df, storm_df, map_id):
@@ -205,6 +204,33 @@ def plot_heatmaps(human_df, kill_df, botkill_df, death_df, botdeath_df, map_id):
     ax3.set_title("Death Zones")
 
     return fig1, fig2, fig3
+
+
+def load_day_data(selected_date):
+
+    base_path = "player_data"
+    folder_path = os.path.join(base_path, selected_date)
+
+    files = os.listdir(folder_path)
+
+    all_data = []
+
+    for file in files:
+        file_path = os.path.join(folder_path, file)
+
+        table = pq.read_table(file_path)
+        df = table.to_pandas()
+
+        df["date"] = selected_date
+        all_data.append(df)
+
+    combined_df = pd.concat(all_data, ignore_index=True)
+
+    combined_df["event"] = combined_df["event"].apply(
+        lambda x: x.decode("utf-8") if isinstance(x, bytes) else x
+    )
+
+    return combined_df
 
 def main():
 
