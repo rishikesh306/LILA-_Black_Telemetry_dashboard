@@ -114,7 +114,7 @@ plt.close(fig)
 
 st.subheader("🔥 Heatmaps")
 
-fig1, fig2, fig3 = plot_heatmaps(
+fig1, fig2 = plot_heatmaps(
     human_df,
     kill_df,
     botkill_df,
@@ -123,7 +123,7 @@ fig1, fig2, fig3 = plot_heatmaps(
     selected_map
 )
 
-col1, col2, col3 = st.columns(3)
+col1, col2 = st.columns(2)
 
 with col1:
     st.pyplot(fig1)
@@ -133,6 +133,3 @@ with col2:
     st.pyplot(fig2)
     plt.close(fig2)
 
-with col3:
-    st.pyplot(fig3)
-    plt.close(fig3)

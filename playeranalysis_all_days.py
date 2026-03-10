@@ -170,23 +170,23 @@ def plot_journey(human_df, bot_df, kill_df, death_df, botkill_df, botdeath_df, l
 
 
 def plot_heatmaps(human_df, kill_df, botkill_df, death_df, botdeath_df, selected_map):
-
+    plt.close("all")
     import matplotlib.pyplot as plt
     import pandas as pd
+    
+    map_settings = {
+    "AmbroseValley": 4320,
+    "GrandRift": 2160,
+    "Lockdown": 9000,
+}
 
-    map_img = get_map_image(selected_map)
-
-    if map_img is None:
-        return None, None, None
-
-    map_size = map_img.shape[1]
+    map_size = map_settings.get(selected_map, 2000)
 
     kill_data = pd.concat([kill_df, botkill_df])
     death_data = pd.concat([death_df, botdeath_df])
 
     # -------- Player Activity --------
     fig1, ax1 = plt.subplots(figsize=(6,6))
-    ax1.imshow(map_img)
 
     if not human_df.empty:
         ax1.scatter(
@@ -194,17 +194,18 @@ def plot_heatmaps(human_df, kill_df, botkill_df, death_df, botdeath_df, selected
             human_df["map_y"],
             s=4,
             c="yellow",
-            alpha=0.3
+            alpha=0.3,
+            label="Players"
         )
 
+    
     ax1.set_xlim(0, map_size)
     ax1.set_ylim(map_size, 0)
-    ax1.set_title("Player Activity")
+    ax1.set_title("Player Activity Heatmap")
     ax1.axis("off")
 
-    # -------- Kill Locations --------
+    # -------- Kill + Death Combined --------
     fig2, ax2 = plt.subplots(figsize=(6,6))
-    ax2.imshow(map_img)
 
     if not kill_data.empty:
         ax2.scatter(
@@ -212,33 +213,27 @@ def plot_heatmaps(human_df, kill_df, botkill_df, death_df, botdeath_df, selected
             kill_data["map_y"],
             s=8,
             c="red",
-            alpha=0.5
+            alpha=0.6,
+            label="Kills"
         )
 
-    ax2.set_xlim(0, map_size)
-    ax2.set_ylim(map_size, 0)
-    ax2.set_title("Kill Locations")
-    ax2.axis("off")
-
-    # -------- Death Locations --------
-    fig3, ax3 = plt.subplots(figsize=(6,6))
-    ax3.imshow(map_img)
-
     if not death_data.empty:
-        ax3.scatter(
+        ax2.scatter(
             death_data["map_x"],
             death_data["map_y"],
             s=8,
             c="blue",
-            alpha=0.5
+            alpha=0.6,
+            label="Deaths"
         )
 
-    ax3.set_xlim(0, map_size)
-    ax3.set_ylim(map_size, 0)
-    ax3.set_title("Death Locations")
-    ax3.axis("off")
-    plt.close("all")
-    return fig1, fig2, fig3
+    ax2.set_xlim(0, map_size)
+    ax2.set_ylim(map_size, 0)
+    ax2.set_title("Kill vs Death Hotspots")
+    ax2.legend()
+    ax2.axis("off")
+
+    return fig1, fig2
 
 
 def load_day_data(selected_date):
@@ -299,9 +294,9 @@ def main():
     plt.show()
 
     # 8 plot heatmaps
-    fig1, fig2, fig3 = plot_heatmaps(human_df, kill_df, botkill_df, death_df, botdeath_df, selected_map)
+    fig1,fig2 = plot_heatmaps(human_df, kill_df, botkill_df, death_df, botdeath_df, selected_map)
     plt.show()
-
+    plt.close("all")
 
 if __name__ == "__main__":
     main()
