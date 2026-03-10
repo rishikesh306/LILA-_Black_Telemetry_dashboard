@@ -8,7 +8,7 @@ Built for Level Designers to explore how players move, fight, and die across 3 m
 
 ---
 
-## Live Demo
+## Live multiple player Telemetry dasboard
 
 🔗 [View Dashboard](https://lila-blacktelemetrydashboard-miqwtowrayof47w7wdrqou.streamlit.app/)
 
