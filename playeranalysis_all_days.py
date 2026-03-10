@@ -70,7 +70,11 @@ def convert_coordinates(df, map_id):
     "GrandRift":     {"origin_x": -290, "origin_z": -290, "scale": 581,  "map_size": 2160},
     "Lockdown":      {"origin_x": -500, "origin_z": -500, "scale": 1000, "map_size": 9000},
 }
-    settings = map_settings[map_id]
+    
+    settings = map_settings.get(map_id)
+
+    if settings is None:
+        return df
     origin_x = settings["origin_x"]
     origin_z = settings["origin_z"]
     scale = settings["scale"]
@@ -112,13 +116,19 @@ def get_map_image(map_id):
         "Lockdown":      "Lockdown_Minimap.jpg",
     }
 
-    image_file = map_images[map_id]  # correct map image select pannurom
+    image_file = map_images.get(map_id)
+
+    if image_file is None:
+        return None
     return mpimg.imread(os.path.join(BASE_DIR, "minimaps", image_file))  # image load pannurom
 
 import matplotlib.pyplot as plt
 def plot_journey(human_df, bot_df, kill_df, death_df, botkill_df, botdeath_df, loot_df, storm_df, map_id):
 
-    map_img = get_map_image(map_id)  # correct map image load pannurom
+    map_img = get_map_image(map_id)
+    
+    if map_img is None:
+        return None
 
     fig, ax = plt.subplots(figsize=(10, 8))
     ax.imshow(map_img)
