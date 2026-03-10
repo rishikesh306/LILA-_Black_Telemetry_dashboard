@@ -62,6 +62,8 @@ def apply_timeline(df, seconds=10):
     return df.iloc[:cutoff]  # cutoff vara data return pannurom
 
 def convert_coordinates(df, map_id):
+    
+    df = df.copy()
 
     map_settings = {
     "AmbroseValley": {"origin_x": -370, "origin_z": -473, "scale": 900,  "map_size": 4320},
@@ -74,8 +76,9 @@ def convert_coordinates(df, map_id):
     scale = settings["scale"]
     map_size = settings["map_size"]  # each map ku correct size!
 
-    df["map_x"] = ((df["x"] - origin_x) / scale) * map_size
-    df["map_y"] = (1 - ((df["z"] - origin_z) / scale)) * map_size
+
+    df.loc[:, "map_x"] = ((df["x"] - origin_x) / scale) * map_size
+    df.loc[:, "map_y"] = (1 - ((df["z"] - origin_z) / scale)) * map_size
 
     return df
 
