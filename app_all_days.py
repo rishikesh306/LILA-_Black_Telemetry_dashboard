@@ -37,7 +37,6 @@ if df is None or df.empty:
     st.warning("⚠️ No data found for this date")
     st.stop()
 
-st.write("Rows:", len(df))
 
 # Match Selection
 matches = sorted(df["match_id"].unique())
