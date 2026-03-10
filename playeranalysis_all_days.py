@@ -172,7 +172,7 @@ def plot_journey(human_df, bot_df, kill_df, death_df, botkill_df, botdeath_df, l
 def plot_heatmaps(human_df, kill_df, botkill_df, death_df, botdeath_df, selected_map):
     plt.close("all")
    
-    
+    map_img = get_map_image(selected_map)
     map_settings = {
     "AmbroseValley": 4320,
     "GrandRift": 2160,
@@ -187,12 +187,15 @@ def plot_heatmaps(human_df, kill_df, botkill_df, death_df, botdeath_df, selected
     # -------- Player Activity --------
     fig1, ax1 = plt.subplots(figsize=(6,6))
 
+    if map_img is not None:
+        ax1.imshow(map_img)
+
     if not human_df.empty:
         ax1.scatter(
             human_df["map_x"],
             human_df["map_y"],
-            s=4,
-            c="yellow",
+            s=8,
+            c="black",
             alpha=0.3,
             label="Players"
         )
@@ -206,6 +209,8 @@ def plot_heatmaps(human_df, kill_df, botkill_df, death_df, botdeath_df, selected
     # -------- Kill + Death Combined --------
     fig2, ax2 = plt.subplots(figsize=(6,6))
 
+    if map_img is not None:
+        ax2.imshow(map_img)
     if not kill_data.empty:
         ax2.scatter(
             kill_data["map_x"],
