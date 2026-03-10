@@ -14,7 +14,10 @@ from playeranalysis_all_days import (
 st.title("🎮 LILA BLACK - Player Telemetry Dashboard")
 
 # load all data
-@st.cache_data  # ← data once load pannurom, again reload pannatu
+# @st.cache_data  # ← data once load pannurom, again reload pannatu
+@st.cache_data(max_entries=1, ttl=3600)  # ← cache limit add pannurom
+def get_data():
+    return load_all_data()
 def get_data():
     return load_all_data()
 
