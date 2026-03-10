@@ -97,6 +97,10 @@ import matplotlib.image as mpimg  # map image load pannurom
 
 BASE_DIR = os.path.dirname(__file__)  # current file location
 
+from functools import lru_cache
+
+@lru_cache(maxsize=3)
+
 def get_map_image(map_id):
 
     map_images = {
