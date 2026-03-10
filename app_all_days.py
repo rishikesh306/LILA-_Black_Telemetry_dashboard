@@ -1,5 +1,8 @@
 import streamlit as st
+import matplotlib
+matplotlib.use("Agg")
 import matplotlib.pyplot as plt
+
 from playeranalysis_all_days import (
     load_day_data,
     apply_timeline,
@@ -28,12 +31,13 @@ selected_date = st.sidebar.selectbox(
 
 # Load Data
 df = get_data(selected_date)
-st.write("Rows:", len(df))
 
 # Safety check
 if df is None or df.empty:
     st.warning("⚠️ No data found for this date")
     st.stop()
+
+st.write("Rows:", len(df))
 
 # Match Selection
 matches = sorted(df["match_id"].unique())
@@ -88,6 +92,7 @@ if human_df.empty:
 
 # ---------------- PLAYER JOURNEY ----------------
 
+plt.close("all")
 st.subheader("🗺️ Player Journey")
 
 fig = plot_journey(

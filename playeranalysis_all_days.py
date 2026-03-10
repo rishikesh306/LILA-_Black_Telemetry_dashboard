@@ -1,6 +1,8 @@
 import pyarrow.parquet as pq
 import os
 import pandas as pd
+import matplotlib
+matplotlib.use("Agg")
 
 def load_all_data():
 
