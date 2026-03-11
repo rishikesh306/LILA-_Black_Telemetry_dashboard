@@ -8,7 +8,7 @@ Built for Level Designers to explore how players move, fight, and die across 3 m
 
 ---
 
-## Live multiple player Telemetry dasboard
+## Live Demo
 
 🔗 [View Dashboard](https://lila-blacktelemetrydashboard-miqwtowrayof47w7wdrqou.streamlit.app/)
 
@@ -110,7 +110,8 @@ The mentioned limitations are related to free-tier cloud infrastructure.
 - 🔥 **Heatmaps** — Player traffic, kill zones, and death zones overlaid on the map
 - 🎮 **Filters** — Filter by date, match, and map
 - ⏯️ **Timeline Slider** — Watch a match unfold step by step
-
+- 👱vs🤖 **Human vs Bot movement and gameplay** — Can able to see the difference between human and bot gameplay.
+- (Example: **Date:** February_11, **Match_id:** 5a7b3a31-17cb-485a-8550-676323579c18.nakama-0)
 ---
 
 ## How It Works
